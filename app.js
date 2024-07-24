@@ -8,7 +8,7 @@ app.set('view engine', '.hbs')
 app.set('views', './views')
 app.use(express.static('public'))
 
-
+const restaurants =require('./public/jsons/restaurant.json').results
 
 app.use(express.static('public'))
 
@@ -16,12 +16,12 @@ app.get('/', (req, res) => {
   res.redirect('/items')
 })
 
-app.get('/items',(req, res)=>{
-  res.render('index')
+app.get('/restaurants',(req, res)=>{
+  res.render('index', { restaurants:restaurants })
 
 })
 
-app.get('/item/:id',(req, res)=>{
+app.get('/restaurant/:id',(req, res)=>{
   const id = req.params.id
   res.send(`read item :${id}`)
 })
