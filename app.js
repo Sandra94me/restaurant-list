@@ -13,12 +13,22 @@ const restaurants =require('./public/jsons/restaurant.json').results
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-  res.redirect('/items')
+  res.redirect('/restaurants')
 })
 
 app.get('/restaurants',(req, res)=>{
-  res.render('index', { restaurants:restaurants })
-
+  const keywords = req.query.keyword
+  const MatchedItem = keywords?restaurants.filter((item) => 
+    Object.values(item).some((property)=>{
+      if(typeof property ==='string'){
+        return property.toLowerCase().includes(keywords.toLowerCase())
+      }
+      return false
+    })
+  ):restaurants
+  // console.log(MatchedItem)
+  //印出所有物件底下的屬性與關鍵字相符，並回傳該物件
+  res.render('index', { restaurants: MatchedItem , keywords })
 })
 
 app.get('/restaurant/:id',(req, res)=>{
